@@ -3,6 +3,8 @@ import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
+import 'dotenv/config';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -23,6 +25,11 @@ export class AuthService {
       username: user.email,
       sub: { name: user.name },
     };
-    return { ...user, accesToken: this.jwtService.sign(payload) };
+    return {
+      ...user,
+      accesToken: this.jwtService.sign(payload, {
+        secret: process.env.jwt_secret,
+      }),
+    };
   }
 }
